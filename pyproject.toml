@@ -1,0 +1,14 @@
+[project]
+name = "pycorubot"
+version = "0.1.0"
+description = "Arquetipo para bot de Telegram"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "kink>=0.8.1",
+    "python-telegram-bot>=21.7",
+    "python-dotenv",
+    "telethon>=1.38.1",
+    "pyyaml>=6.0.2",
+    "structlog>=24.4.0",
+]
