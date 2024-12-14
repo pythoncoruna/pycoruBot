@@ -3,6 +3,7 @@ from telegram.ext import CommandHandler, ApplicationBuilder, Application as Tele
 
 from config import Config
 from core.help.help_telegram_message_handler import new_wrapped_help_message_handler
+from core.insult.insult_telegram_message_handler import new_wrapped_insult_message_handler
 from shared.environment_var_getter import EnvironmentVarGetter
 from shared.message_bus import MessageBus
 from shared.message_sender import MessageSender, TelegramMessageSender
@@ -40,11 +41,13 @@ async def bot_bootstrap_di() -> None:
     Defines handlers for different kinds of messages
     """
     help_cmd_handler = new_wrapped_help_message_handler(message_bus=di[MessageBus])
+    insult_cmd_handler = new_wrapped_insult_message_handler(message_bus=di[MessageBus])
     di[TelegramBot] = await build_telegram_bot_instance(
         env_getter=di[EnvironmentVarGetter],
         config=di[Config],
         handlers={
             'help': help_cmd_handler,
+            'insult': insult_cmd_handler,
         }
     )
 

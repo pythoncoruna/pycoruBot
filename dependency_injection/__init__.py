@@ -7,6 +7,7 @@ from kink import Container, di
 from dependency_injection.bot_di import bot_bootstrap_di
 from dependency_injection.common import common_services_bootstrap_di
 from dependency_injection.help_di import help_bootstrap_di
+from dependency_injection.insult_di import insult_bootstrap_di
 
 
 async def bootstrap_di() -> Container:
@@ -17,8 +18,12 @@ async def bootstrap_di() -> Container:
     load_dotenv(dotenv_path=Path('.env'), override=True)
 
     await common_services_bootstrap_di()
+    # Creates handlers for different kinds of messages
     await bot_bootstrap_di()
+
+    # These functions map a message_type to a specific handler
     await help_bootstrap_di()
+    await insult_bootstrap_di()
     return di
 
 
