@@ -14,6 +14,11 @@ from shared.telegram_utils import (
 def new_wrapped_help_message_handler(
         message_bus: MessageBus
 ) -> Callable[[Update, CallbackContext], Coroutine[Any, Any, None]]:
+    """
+    Creates dynamically the handler for handling specific kinds of messages
+    :param message_bus:
+    :return:
+    """
     async def handler(update: Update, context: CallbackContext):
         sender = await sender_from_message_update(update)
         chat_id, text, thread_id = await message_content_from_update_or_fail(update)

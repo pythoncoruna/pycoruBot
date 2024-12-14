@@ -1,7 +1,6 @@
 from kink import di
 
 from config.administrators import InMemoryAdministratorsStorage
-from core.help.help_menu_composer import HelpMenuComposer
 from core.help.help_message_handler import HelpMessage, HelpMessageHandler
 from shared.logger import Logger
 from shared.message_bus import MessageBus
@@ -22,11 +21,10 @@ async def help_bootstrap_di() -> None:
     )
 
     await message_bus.register_message_handler(
-        message=HelpMessage,
+        message_type=HelpMessage,
         handler=HelpMessageHandler(
             logger=logger,
             admins_repo=admins_repo,
-            help_menu_composer=HelpMenuComposer(),
             sender=message_sender
         )
     )
