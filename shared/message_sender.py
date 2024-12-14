@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Text, Dict, Any
 
-from telegram.ext import Application
 from telegram.error import TelegramError
+from telegram.ext import Application
 
 
 class MessageSendingError(Exception):
@@ -20,7 +20,7 @@ class Message:
 class MessageSender(ABC):
 
     @abstractmethod
-    def send(self, message: Message, **kwargs) -> None:
+    async def send(self, message: Message, **kwargs) -> None:
         pass
 
 
