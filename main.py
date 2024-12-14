@@ -9,7 +9,7 @@ from telegram.ext import Application
 from config import Config
 from dependency_injection import bootstrap_di
 from shared.logger import Logger
-from shared.telegram_utils import init_bot, shutdown_bot
+from shared.telegram_utils import init_bot, shutdown_bot, announce_available
 
 
 def main():
@@ -36,6 +36,7 @@ def main():
 
         app_logger.warning(f'Starting bot main loop')
         event_loop.run_until_complete(init_bot(bot))
+        event_loop.run_until_complete(announce_available(bot))
         event_loop.run_forever()
     except KeyboardInterrupt:
         sys.exit(0)

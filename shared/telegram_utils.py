@@ -1,9 +1,12 @@
+import os
 from typing import Callable, Dict, Text, Coroutine, Tuple, Optional, Any
 
+from kink import di
 from telegram import Update
 from telegram.ext import Application, CallbackContext
 
 from core.message import User
+from shared.message_sender import MessageSender
 
 TelegramHandler = Callable[[Update, CallbackContext], Coroutine[Any, Any, None]]
 TelegramHandlers = Dict[Text, TelegramHandler]
@@ -53,6 +56,9 @@ async def init_bot(bot: Application) -> None:
     await bot.start()
     await bot.updater.start_polling(allowed_updates=Update.ALL_TYPES)
 
+async def announce_available(bot: Application) -> None:
+    sender = di[MessageSender]
+    await sender.application.bot.send_message(text="I'm available!", chat_id=os.environ.get('DEV_TG_CHAT_ID'))
 
 async def shutdown_bot(bot: Application) -> None:
     """
