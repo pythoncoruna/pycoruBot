@@ -4,6 +4,7 @@ from typing import Text
 from dotenv import load_dotenv
 from kink import Container, di
 
+from cat_di import cat_bootstrap_di
 from dependency_injection.bot_di import bot_bootstrap_di
 from dependency_injection.common import common_services_bootstrap_di
 from dependency_injection.help_di import help_bootstrap_di
@@ -24,6 +25,7 @@ async def bootstrap_di() -> Container:
     # These functions map a message_type to a specific handler
     await help_bootstrap_di()
     await insult_bootstrap_di()
+    await cat_bootstrap_di()
     return di
 
 
