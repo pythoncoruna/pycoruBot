@@ -1,14 +1,15 @@
 from kink import di
 from telegram.ext import CommandHandler, ApplicationBuilder, Application as TelegramBot
 
-from cat.cat_telegram_message_handler import new_wrapped_cat_message_handler
+from cat.cat_message_handler import CatMessage
 from config import Config
-from core.help.help_telegram_message_handler import new_wrapped_help_message_handler
-from core.insult.insult_telegram_message_handler import new_wrapped_insult_message_handler
+from help.help_message_handler import HelpMessage
+from insult.insult_message_handler import InsultMessage
 from shared.environment_var_getter import EnvironmentVarGetter
 from shared.message_bus import MessageBus
 from shared.message_sender import MessageSender, TelegramMessageSender
 from shared.telegram_utils import TelegramHandlers
+from telegram_message_handler import new_wrapped_message_handler
 
 
 async def build_telegram_bot_instance(
@@ -41,17 +42,20 @@ async def bot_bootstrap_di() -> None:
     """
     Defines handlers for different kinds of messages
     """
-    help_cmd_handler = new_wrapped_help_message_handler(message_bus=di[MessageBus])
-    insult_cmd_handler = new_wrapped_insult_message_handler(message_bus=di[MessageBus])
-    cat_cmd_handler = new_wrapped_cat_message_handler(message_bus=di[MessageBus])
+    mappings = {
+        'help': HelpMessage,
+        'insult': InsultMessage,
+        'cat': CatMessage,
+    }
+
+    handlers_dict = { command: new_wrapped_message_handler(message_bus=di[MessageBus], message_type_class=mtype)
+          for command,mtype in mappings.items()
+    }
+
     di[TelegramBot] = await build_telegram_bot_instance(
         env_getter=di[EnvironmentVarGetter],
         config=di[Config],
-        handlers={
-            'help': help_cmd_handler,
-            'insult': insult_cmd_handler,
-            'cat': cat_cmd_handler,
-        }
+        handlers=handlers_dict
     )
 
     di[MessageSender] = TelegramMessageSender(application=di[TelegramBot])
